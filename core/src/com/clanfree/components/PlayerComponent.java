@@ -10,7 +10,9 @@ public class PlayerComponent extends Component {
 	public static final int STATE_STANDING = 2;
 	public static final int STATE_RUNNING = 3;
 	
-	public static final float MOVE_VELOCITY = 1000f;
+	public static final float CAP_VELOCITY = 1000f;
+	public static final float MOVE_ACC = 100f;
+	public static final float FRICTION = 1000f;
 	public static final float WIDTH = 0.8f;
 	
 	public static final float MASS = 1.0f;

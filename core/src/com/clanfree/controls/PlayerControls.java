@@ -7,42 +7,28 @@ import com.clanfree.systems.PlayerSystem;
 
 
 public class PlayerControls extends ControllerAdapter {
-	private PlayerSystem system;
+	private PlayerSystem pSystem;
 	private long id;
 	
-	public PlayerControls(PlayerSystem syst, long id) {
-		this.system = syst;
-		this.id = id;
+	public PlayerControls(PlayerSystem pSyst) {
+		this.pSystem = pSyst;
 	}
 	
 	@Override
-	public boolean buttonDown (Controller controller, int buttonCode){
-		/*switch (buttonCode) {
-		case Xbox360Pad.BUTTON_A:
-			system.jump(id,
-						controller.getAxis(Xbox360Pad.AXIS_LEFT_X),
-					    controller.getAxis(Xbox360Pad.AXIS_LEFT_Y));
+	public boolean axisMoved (Controller controller, int axisCode, float value) {
+		switch (axisCode) {
+		case Xbox360Pad.AXIS_RIGHT_X:
+			//system.setSpeedX(value);
 			return true;
-		case Xbox360Pad.BUTTON_RB:
-			system.shootGrapnel(id,
-								controller.getAxis(Xbox360Pad.AXIS_LEFT_X),
-					    		controller.getAxis(Xbox360Pad.AXIS_LEFT_Y));
+		case Xbox360Pad.AXIS_RIGHT_Y:
 			return true;
-		}*/
-		
-		return false;
-	}
-
-	@Override
-	public boolean buttonUp (Controller controller, int buttonCode){
-		/*switch (buttonCode) {
-		case Xbox360Pad.BUTTON_A:
-			system.grabbing(id);
+		case Xbox360Pad.AXIS_LEFT_X:
+			pSystem.setAccY(-value);
 			return true;
-		case Xbox360Pad.BUTTON_RB:
-			system.recallGrapnel(id);
+		case Xbox360Pad.AXIS_LEFT_Y:			
+			pSystem.setAccX(value);
 			return true;
-		}*/
+		}
 		
 		return false;
 	}

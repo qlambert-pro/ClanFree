@@ -43,18 +43,17 @@ public class GameMode extends ScreenAdapter {
 		/* Init Map */
 		map = mapLoader.load();
 		
-		PlayerSystem ps = new PlayerSystem();
+		
 				
 		/* Init Character */
 		Controller c = Controllers.getControllers().first();
-		Entity e = WorldBuilder.getBuilder().buildPlayer(c, ps, map.getSpawn());
+		Entity e = WorldBuilder.getBuilder().buildPlayer(c, map.getSpawn());
 		
 		cam = new OrthographicCamera(ConfigManager.camWidth  * ConfigManager.minBlockSize,
 								 ConfigManager.camHeight * ConfigManager.minBlockSize);
 		
 		createCamera(e);
 		
-		engine.addSystem(ps);
 		engine.addSystem(new PhysicsSystem());
 		engine.addSystem(new CameraSystem());
 		engine.addSystem(new AnimationSystem());

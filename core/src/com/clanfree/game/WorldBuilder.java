@@ -37,7 +37,7 @@ public class WorldBuilder {
 		engine = e;
 	}
 	
-	public Entity buildPlayer(Controller c, PlayerSystem ps, Vector2 p) {
+	public Entity buildPlayer(Controller c, Vector2 p) {
 		Entity entity = new Entity();
 		
 		AnimationComponent animation = new AnimationComponent();
@@ -59,8 +59,6 @@ public class WorldBuilder {
 		position.pos.set(p);
 		position.scale.set(0.8f, 0.8f);
 		
-		movement.velocity.set(0.0f * PlayerComponent.MOVE_VELOCITY,
-							  1.0f * PlayerComponent.MOVE_VELOCITY);
 		 
 		state.set(PlayerComponent.STATE_STANDING);
 		
@@ -72,8 +70,11 @@ public class WorldBuilder {
 		entity.add(texture);
 		
 		engine.addEntity(entity);
+		
+		PlayerSystem ps = new PlayerSystem(entity); 
+		engine.addSystem(ps);
 				
-		c.addListener(new PlayerControls(ps, entity.getId()));
+		c.addListener(new PlayerControls(ps));
 		
 		PhysicsDataStructure s = new PhysicsDataStructure(new PhysicsCharacter(entity.getId(), ps),
 														  PhysicsObjectType.PLAYER);

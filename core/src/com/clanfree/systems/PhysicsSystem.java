@@ -24,11 +24,9 @@ public class PhysicsSystem extends IteratingSystem {
 		TransformComponent tComp = tm.get(entity);		
 		
 		tComp.pos.set(tComp.body.getWorldCenter().scl(PhysicsManager.BOX_TO_WORLD));
-		tComp.rotation = tComp.body.getAngle();
 		
 		MovementComponent mComp = cm.get(entity);
 		
 		mComp.velocity.set(tComp.body.getLinearVelocity());
-		mComp.rotation_speed = tComp.body.getAngularVelocity();
 	}
 }

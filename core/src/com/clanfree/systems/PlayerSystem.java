@@ -1,36 +1,43 @@
 package com.clanfree.systems;
 
-import java.util.HashMap;
-
-import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
-import com.badlogic.ashley.core.Family;
-import com.badlogic.ashley.systems.IteratingSystem;
-import com.badlogic.ashley.utils.ImmutableArray;
+import com.badlogic.ashley.core.EntitySystem;
+import com.badlogic.gdx.math.MathUtils;
+import com.clanfree.components.MovementComponent;
 import com.clanfree.components.PlayerComponent;
+import com.clanfree.components.TransformComponent;
+import com.clanfree.configuration.ConfigManager;
 
 
 
-public class PlayerSystem extends IteratingSystem{	
-	private HashMap<Long, Integer> ids = new HashMap<Long, Integer>();
+
+public class PlayerSystem extends EntitySystem{	
+	private Entity player;
 	
-	public PlayerSystem() {
-		super(Family.getFor(PlayerComponent.class));	
+	public PlayerSystem(Entity player) {
+		this.player = player;
 	}
 	
 	@Override
-	public void addedToEngine (Engine engine) {
-		super.addedToEngine(engine);
+	public void update(float dt) {
+		TransformComponent tp = player.getComponent(TransformComponent.class);
+		MovementComponent mp = player.getComponent(MovementComponent.class);
 		
-		ImmutableArray<Entity> entities = getEntities();
+		tp.body.applyForceToCenter(mp.accel, true);
 		
-		for(int i = 0; i < entities.size(); i++) {
-			ids.put(entities.get(i).getId(), i);
-		}
-	}	
+		if (!mp.accel.epsilonEquals(0, 0, ConfigManager.epsilon)) {
+			tp.rotation = MathUtils.atan2(mp.accel.y, mp.accel.x) -
+				MathUtils.atan2(1, 0);
+		}		
+	}
+
+	public void setAccX(float value) {
+		MovementComponent mp = player.getComponent(MovementComponent.class); 
+		mp.accel.x = value * PlayerComponent.MOVE_ACC;
+	}
 	
-	@Override
-	protected void processEntity(Entity entity, float deltaTime) {
-		
+	public void setAccY(float value) {
+		MovementComponent mp = player.getComponent(MovementComponent.class); 
+		mp.accel.y = value * PlayerComponent.MOVE_ACC;		
 	}
 }
