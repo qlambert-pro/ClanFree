@@ -2,21 +2,23 @@ package com.clanfree.game;
 
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
-import com.badlogic.gdx.controllers.Controller;
 import com.badlogic.gdx.math.Vector2;
 import com.clanfree.components.AnimationComponent;
+import com.clanfree.components.ArrowComponent;
 import com.clanfree.components.MovementComponent;
 import com.clanfree.components.PlayerComponent;
 import com.clanfree.components.StateComponent;
 import com.clanfree.components.TextureComponent;
 import com.clanfree.components.TransformComponent;
-import com.clanfree.controls.PlayerControls;
+import com.clanfree.components.ZombieComponent;
+import com.clanfree.physics.PhysicsArrow;
 import com.clanfree.physics.PhysicsCharacter;
 import com.clanfree.physics.PhysicsDataStructure;
 import com.clanfree.physics.PhysicsManager;
 import com.clanfree.physics.PhysicsObjectType;
+import com.clanfree.physics.PhysicsZombie;
 import com.clanfree.rendering.GraphicsAsset;
-import com.clanfree.systems.PlayerSystem;
+
 
 
 public class WorldBuilder {
@@ -37,7 +39,7 @@ public class WorldBuilder {
 		engine = e;
 	}
 	
-	public Entity buildPlayer(Controller c, Vector2 p) {
+	public Entity buildPlayer(Vector2 p) {
 		Entity entity = new Entity();
 		
 		AnimationComponent animation = new AnimationComponent();
@@ -70,17 +72,90 @@ public class WorldBuilder {
 		entity.add(texture);
 		
 		engine.addEntity(entity);
-		
-		PlayerSystem ps = new PlayerSystem(entity); 
-		engine.addSystem(ps);
 				
-		c.addListener(new PlayerControls(ps));
+		 
 		
-		PhysicsDataStructure s = new PhysicsDataStructure(new PhysicsCharacter(entity.getId(), ps),
+		PhysicsDataStructure s = new PhysicsDataStructure(new PhysicsCharacter(),
 														  PhysicsObjectType.PLAYER);
 		position.body = PhysicsManager.getInstance().createDynamicCircle(
-				position.pos.cpy(), PlayerComponent.WIDTH/2, s);
-		PhysicsManager.getInstance().addSensor(position.body, 2*PlayerComponent.WIDTH);
+				position.pos.cpy(), PlayerComponent.WIDTH/2, s);				
+		
+		return entity;
+	}
+	
+	public Entity buildZombie(Vector2 p) {
+		Entity entity = new Entity();
+		
+		AnimationComponent animation = new AnimationComponent();
+		ZombieComponent zombie = new ZombieComponent();
+		MovementComponent movement = new MovementComponent();
+		TransformComponent position = new TransformComponent();
+		StateComponent state = new StateComponent();
+		TextureComponent texture = new TextureComponent();
+		
+
+		animation.animations.put(ZombieComponent.STATE_FOLLOWING, GraphicsAsset.zombie);
+		
+		
+		position.pos.set(p);
+		position.scale.set(0.8f, 0.8f);
+		
+		 
+		state.set(ZombieComponent.STATE_FOLLOWING);
+		
+		entity.add(animation);
+		entity.add(zombie);
+		entity.add(movement);		
+		entity.add(position);
+		entity.add(state);
+		entity.add(texture);
+		
+		engine.addEntity(entity);
+
+		PhysicsDataStructure s = new PhysicsDataStructure(new PhysicsZombie(),
+														  PhysicsObjectType.ZOMBIE);
+		position.body = PhysicsManager.getInstance().createDynamicCircle(
+				position.pos.cpy(), PlayerComponent.WIDTH/2, s);		
+		
+		movement.velocity.scl(position.body.getMass());
+		position.body.setLinearVelocity(movement.velocity);
+		position.body.setAngularDamping(0);				
+		
+		return entity;
+	}
+	
+	public Entity buildArrow(Vector2 p){
+		Entity entity = new Entity();
+		
+		AnimationComponent animation = new AnimationComponent();
+		ArrowComponent arrow = new ArrowComponent();
+		MovementComponent movement = new MovementComponent();
+		TransformComponent position = new TransformComponent();
+		StateComponent state = new StateComponent();
+		TextureComponent texture = new TextureComponent();
+		
+
+		animation.animations.put(ArrowComponent.STATE_ARROWING, GraphicsAsset.arrow);		
+		
+		position.pos.set(p);
+		position.scale.set(0.8f, 0.8f);
+		
+		 
+		state.set(ArrowComponent.STATE_ARROWING);
+		
+		entity.add(animation);
+		entity.add(arrow);
+		entity.add(movement);		
+		entity.add(position);
+		entity.add(state);
+		entity.add(texture);
+		
+		engine.addEntity(entity);
+
+		PhysicsDataStructure s = new PhysicsDataStructure(new PhysicsArrow(),
+														  PhysicsObjectType.ARROW);
+		position.body = PhysicsManager.getInstance().createArrow(
+				position.pos.cpy(), PlayerComponent.WIDTH/2, s);		
 		
 		movement.velocity.scl(position.body.getMass());
 		position.body.setLinearVelocity(movement.velocity);

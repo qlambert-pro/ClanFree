@@ -8,6 +8,8 @@ import com.badlogic.gdx.graphics.g2d.Animation.PlayMode;
 
 public class GraphicsAsset {
 	public static Animation adjouaStanding;
+	public static Animation zombie;
+	public static Animation arrow;
 	
 	public static Texture loadTexture (String file) {
 		return new Texture(Gdx.files.internal(file));
@@ -15,7 +17,14 @@ public class GraphicsAsset {
 	
 	public static void load() {
 		Texture characAnim = loadTexture("character.png"); 
+		
 		adjouaStanding =     new Animation(0.2f, new TextureRegion(characAnim, 0,   0, 400, 400), new TextureRegion(characAnim, 400,   0, 400, 400));
 		adjouaStanding.setPlayMode(PlayMode.LOOP);
+		
+		zombie = new Animation(0.2f, new TextureRegion(characAnim, 0,   400, 400, 400), new TextureRegion(characAnim, 400,   400, 400, 400));
+		zombie.setPlayMode(PlayMode.LOOP);
+		
+		arrow = new Animation(0.2f, new TextureRegion(characAnim, 0,  800, 400, 400), new TextureRegion(characAnim, 400,   800, 400, 400));
+		arrow.setPlayMode(PlayMode.LOOP);
 	}
 }

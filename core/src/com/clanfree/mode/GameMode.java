@@ -14,19 +14,21 @@ import com.clanfree.map.Map;
 import com.clanfree.map.MapLoader;
 import com.clanfree.components.CameraComponent;
 import com.clanfree.configuration.ConfigManager;
+import com.clanfree.controls.PlayerControls;
 import com.clanfree.physics.PhysicsManager;
 import com.clanfree.systems.AnimationSystem;
+import com.clanfree.systems.ArrowSystem;
 import com.clanfree.systems.CameraSystem;
 import com.clanfree.systems.PhysicsSystem;
 import com.clanfree.systems.PlayerSystem;
 import com.clanfree.systems.RenderingSystem;
+import com.clanfree.systems.ZombieSystem;
 
 public class GameMode extends ScreenAdapter {
 	private ClanFree game;
 	
 	private Engine engine;
 	private MapLoader mapLoader;
-	//private CharacterBuilder characterBuilder;
 	private Map map;
 	
 	private OrthographicCamera cam;
@@ -38,7 +40,6 @@ public class GameMode extends ScreenAdapter {
 		WorldBuilder.getBuilder().init(engine);
 		
 		mapLoader = new MapLoader(engine);
-		//characterBuilder = new CharacterBuilder(engine);
 		
 		/* Init Map */
 		map = mapLoader.load();
@@ -47,13 +48,24 @@ public class GameMode extends ScreenAdapter {
 				
 		/* Init Character */
 		Controller c = Controllers.getControllers().first();
-		Entity e = WorldBuilder.getBuilder().buildPlayer(c, map.getSpawn());
+		Entity player = WorldBuilder.getBuilder().buildPlayer(map.getSpawn());
+		Entity arrow = WorldBuilder.getBuilder().buildArrow(map.getSpawn());
+		
+		PlayerSystem ps = new PlayerSystem(player); 
+		ArrowSystem as = new ArrowSystem(arrow);
+		
+		c.addListener(new PlayerControls(ps, as));
+		
+		WorldBuilder.getBuilder().buildZombie(map.getSpawn().cpy().add(10, 10));
 		
 		cam = new OrthographicCamera(ConfigManager.camWidth  * ConfigManager.minBlockSize,
 								 ConfigManager.camHeight * ConfigManager.minBlockSize);
 		
-		createCamera(e);
+		createCamera(player);
 		
+		engine.addSystem(ps);
+		engine.addSystem(as);
+		engine.addSystem(new ZombieSystem(player));
 		engine.addSystem(new PhysicsSystem());
 		engine.addSystem(new CameraSystem());
 		engine.addSystem(new AnimationSystem());
