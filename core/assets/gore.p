@@ -18,10 +18,10 @@ scaling0: 1.0
 timelineCount: 1
 timeline0: 0.0
 - Life - 
-lowMin: 500.0
-lowMax: 1500.0
-highMin: 500.0
-highMax: 1500.0
+lowMin: 5000.0
+lowMax: 10000.0
+highMin: 5000.0
+highMax: 10000.0
 relative: false
 scalingCount: 1
 scaling0: 1.0
@@ -58,8 +58,8 @@ timeline0: 0.0
 - Scale - 
 lowMin: 0.0
 lowMax: 0.0
-highMin: 10.0
-highMax: 10.0
+highMin: 40.0
+highMax: 40.0
 relative: false
 scalingCount: 1
 scaling0: 1.0
@@ -104,9 +104,9 @@ active: false
 active: false
 - Tint - 
 colorsCount: 3
-colors0: 0.39215687
-colors1: 0.39215687
-colors2: 0.39215687
+colors0: 1.0
+colors1: 1.0
+colors2: 1.0
 timelineCount: 1
 timeline0: 0.0
 - Transparency - 
@@ -123,7 +123,7 @@ timeline0: 0.0
 attached: false
 continuous: false
 aligned: false
-additive: true
+additive: false
 behind: false
 premultipliedAlpha: false
 - Image Path -

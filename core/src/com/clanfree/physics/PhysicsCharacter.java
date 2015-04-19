@@ -15,9 +15,9 @@ public class PhysicsCharacter implements PhysicsObject {
 	@Override
 	public void BeginContactHandler(PhysicsDataStructure struct, Contact contact) {
 		if(struct.type == PhysicsObjectType.ZOMBIE) {
-			PlayerComponent zc = player.getComponent(PlayerComponent.class);
+			PlayerComponent pc = player.getComponent(PlayerComponent.class);
 			
-			zc.isDead = true;		
+			pc.isDead = true;		
 		}
 	}
 

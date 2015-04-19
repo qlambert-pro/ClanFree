@@ -2,6 +2,8 @@ package com.clanfree.mode;
 
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.ashley.core.Family;
+import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.ScreenAdapter;
@@ -17,6 +19,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.clanfree.game.ClanFree;
 import com.clanfree.game.WorldBuilder;
 import com.clanfree.components.CameraComponent;
+import com.clanfree.components.GoreComponent;
 import com.clanfree.components.TransformComponent;
 import com.clanfree.configuration.ConfigManager;
 import com.clanfree.controls.KeyboardPlayerControls;
@@ -50,6 +53,7 @@ public class GameMode extends ScreenAdapter {
 	private boolean isEnd = false;
 	private boolean isStart = false;
 	private boolean isCountDown = true;
+	private boolean isFinished = false;
 	private long cdTime = 0;
 	
 
@@ -59,6 +63,8 @@ public class GameMode extends ScreenAdapter {
 	private InputAdapter inputs;
 
 	private long cnt;
+
+
 	
 	public GameMode(ClanFree g) {
 		game = g;				
@@ -69,6 +75,7 @@ public class GameMode extends ScreenAdapter {
 		isEnd = false;
 		isStart = false;
 		isCountDown = true;
+		isFinished = false;
 		cdTime = 0;
 		cnt = 0;
 		
@@ -126,6 +133,20 @@ public class GameMode extends ScreenAdapter {
 			SoundManager.getInstance().endBackgroundMusic();
 			SoundManager.getInstance().stopArrow();
 			PhysicsManager.getInstance().clear();
+			//for all entities create a particle stuff and remove said entity
+			ImmutableArray<Entity> array = engine.getEntitiesFor(Family.getFor(TransformComponent.class));
+			
+			for(int i = 0; i < array.size(); i++) {
+				TransformComponent tc = array.get(i).getComponent(TransformComponent.class);
+				WorldBuilder.getBuilder().buildGore(tc.pos);
+				engine.removeEntity(array.get(i));
+			}
+			
+			isEnd = false;
+			isFinished = true;
+		}
+			
+		if (engine.getEntitiesFor(Family.getFor(GoreComponent.class)).size() == 0 && isFinished) {
 			engine.removeAllEntities();
 			controller.removeListener(controllerListener);
 			game.startCreditMode(System.currentTimeMillis()-time, zombieCount);
