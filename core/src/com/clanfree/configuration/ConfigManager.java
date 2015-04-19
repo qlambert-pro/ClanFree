@@ -4,7 +4,7 @@ import com.clanfree.physics.PhysicsManager;
 
 public class ConfigManager {
 	
-	public static int minBlockSize = 60;
+	public static final int minBlockSize = 60;
 	
 	public static float moveSpeed = 10;
 	public static float accTime = 0.2f;

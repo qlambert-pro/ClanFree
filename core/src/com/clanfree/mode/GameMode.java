@@ -16,8 +16,6 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.clanfree.game.ClanFree;
 import com.clanfree.game.WorldBuilder;
-import com.clanfree.map.Map;
-import com.clanfree.map.MapLoader;
 import com.clanfree.components.CameraComponent;
 import com.clanfree.components.TransformComponent;
 import com.clanfree.configuration.ConfigManager;
@@ -41,8 +39,6 @@ public class GameMode extends ScreenAdapter {
 	private BitmapFont font;
 	
 	private Engine engine;
-	private MapLoader mapLoader;
-	private Map map;
 	
 	Controller controller;
 	ControllerListener controllerListener;
@@ -82,18 +78,13 @@ public class GameMode extends ScreenAdapter {
 		
 		engine = new Engine();
 		WorldBuilder.getBuilder().init(engine);
-		
-		mapLoader = new MapLoader(engine);
-		
-		/* Init Map */
-		map = mapLoader.load();
-		
-		
 				
+		Vector2 spawn = new Vector2(5000*500, 5000*500);
+		
 		/* Init Character */
 		controller = Controllers.getControllers().first();
-		player = WorldBuilder.getBuilder().buildPlayer(map.getSpawn());
-		Entity arrow = WorldBuilder.getBuilder().buildArrow(player, map.getSpawn());
+		player = WorldBuilder.getBuilder().buildPlayer(spawn);
+		Entity arrow = WorldBuilder.getBuilder().buildArrow(player, spawn);
 		
 		PlayerSystem ps = new PlayerSystem(this, player); 
 		ArrowSystem as = new ArrowSystem(arrow);
