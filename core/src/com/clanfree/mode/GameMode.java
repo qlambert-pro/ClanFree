@@ -58,6 +58,8 @@ public class GameMode extends ScreenAdapter {
 	
 	public void show() {		
 		zombieCount = 0;
+		isEnd = false;
+		isStart = true;
 		
 		engine = new Engine();
 		WorldBuilder.getBuilder().init(engine);

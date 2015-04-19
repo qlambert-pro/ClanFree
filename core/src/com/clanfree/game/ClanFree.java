@@ -43,4 +43,12 @@ public class ClanFree extends Game {
 	public void removeInputProcessor(InputAdapter inputs) {
 		this.inputs.removeProcessor(inputs);
 	}
+
+	public void startGameMode() {
+		setScreen(gameMode);
+	}
+
+	public void gameOver() {
+		dispose();
+	}
 }
