@@ -6,6 +6,8 @@ import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
+import com.clanfree.components.MovementComponent;
+import com.clanfree.components.StateComponent;
 import com.clanfree.components.TransformComponent;
 import com.clanfree.components.ZombieComponent;
 import com.clanfree.configuration.ConfigManager;
@@ -30,14 +32,30 @@ public class ZombieSystem extends IteratingSystem {
 	protected void processEntity(Entity entity, float deltaTime) {
 		ZombieComponent zc = entity.getComponent(ZombieComponent.class);
 		TransformComponent tp = entity.getComponent(TransformComponent.class);
+		StateComponent state = entity.getComponent(StateComponent.class);
+		
+		if(state.get() == ZombieComponent.STATE_DEAD &&
+			state.time >= 0.8f)
+			zc.isDead = true;
+		
 		if (zc.isDead) {
 			SoundManager.getInstance().deadZombie();
-			PhysicsManager.getInstance().destroyBody(tp.body);
+			engine.removeEntity(zc.gore);
 			engine.removeEntity(entity);
 			gameMode.killZombie();
 			return;
 		}
 		
+		
+		if(state.get() == ZombieComponent.STATE_DEAD) {
+			if(tp.body != null) {
+				PhysicsManager.getInstance().destroyBody(tp.body);
+				entity.remove(MovementComponent.class);
+				tp.body = null;
+			}
+			
+			return;
+		}
 		
 		TransformComponent atp = adjoua.getComponent(TransformComponent.class);	
 		

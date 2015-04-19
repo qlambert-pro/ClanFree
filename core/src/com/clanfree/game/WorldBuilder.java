@@ -99,6 +99,7 @@ public class WorldBuilder {
 		
 
 		animation.animations.put(ZombieComponent.STATE_FOLLOWING, GraphicsAsset.zombie);
+		animation.animations.put(ZombieComponent.STATE_DEAD, GraphicsAsset.zombie);
 		
 		
 		position.pos.set(p);
@@ -156,10 +157,10 @@ public class WorldBuilder {
 		
 		engine.addEntity(entity);
 
-		PhysicsDataStructure s = new PhysicsDataStructure(new PhysicsArrow(),
+		PhysicsDataStructure s = new PhysicsDataStructure(new PhysicsArrow(entity),
 														  PhysicsObjectType.ARROW);
 		position.body = PhysicsManager.getInstance().createArrow(
-				position.pos.cpy(), PlayerComponent.WIDTH/2, s);		
+				position.pos.cpy(), PlayerComponent.WIDTH*2, s);		
 		
 		movement.velocity.scl(position.body.getMass());
 		position.body.setLinearVelocity(movement.velocity);
@@ -174,6 +175,35 @@ public class WorldBuilder {
 		jointDef.maxLength = ConfigManager.max_distance * PhysicsManager.WORLD_TO_BOX;
 		
 		arrow.joint = (RopeJoint) PhysicsManager.getInstance().createJoint(jointDef);
+		
+		return entity;
+	}
+	
+	public Entity buildGore(Vector2 p, float dir){
+		Entity entity = new Entity();
+		
+		AnimationComponent animation = new AnimationComponent();
+		TransformComponent position = new TransformComponent();
+		StateComponent state = new StateComponent();
+		TextureComponent texture = new TextureComponent();
+		
+
+		animation.animations.put(0, GraphicsAsset.gore);		
+		
+		position.pos.set(p);
+		position.scale.set(0.8f, 0.8f);
+		
+		
+		position.rotation = dir;		
+		 
+		state.set(0);
+		
+		entity.add(animation);	
+		entity.add(position);
+		entity.add(state);
+		entity.add(texture);
+		
+		engine.addEntity(entity);		
 		
 		return entity;
 	}

@@ -20,9 +20,7 @@ public class CreditControl extends InputAdapter {
 
 		case Keys.ESCAPE:
 			cm.gameOver();
-			return true;
-
-		
+			return true;		
 		}
 		
 		return false;

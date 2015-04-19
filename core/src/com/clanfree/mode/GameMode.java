@@ -60,6 +60,8 @@ public class GameMode extends ScreenAdapter {
 
 	private long time;
 	private InputAdapter inputs;
+
+	private long cnt;
 	
 	public GameMode(ClanFree g) {
 		game = g;				
@@ -71,6 +73,7 @@ public class GameMode extends ScreenAdapter {
 		isStart = false;
 		isCountDown = true;
 		cdTime = 0;
+		cnt = 0;
 		
 		batch = new SpriteBatch();
 		font = new BitmapFont();
@@ -143,13 +146,8 @@ public class GameMode extends ScreenAdapter {
 			isStart = false;
 		}
 		
-		
-		
 		Gdx.gl.glClearColor(1f, 1f, 1f, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-		
-				
-		
 		
 		if (isCountDown) {
 			if (cdTime == 0){
@@ -180,10 +178,15 @@ public class GameMode extends ScreenAdapter {
 	}
 	
 	private void spawnZombies() {
-		for (int i = 0; i < ConfigManager.zombiePop; i++) {
-			Vector2 pos = getNewZombiePos();
-			WorldBuilder.getBuilder().buildZombie(pos);
-		}
+			if((System.currentTimeMillis() - time)/1000 <= cnt)
+				return;
+		
+			for (int i = 0; i < cnt; i++) {
+				SoundManager.getInstance().startZombie();
+				Vector2 pos = getNewZombiePos();
+				WorldBuilder.getBuilder().buildZombie(pos);
+			}
+			cnt++;
 	}
 
 	private Vector2 getNewZombiePos() {

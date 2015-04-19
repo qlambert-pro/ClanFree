@@ -102,9 +102,10 @@ public class PhysicsManager {
 		FixtureDef fixtureDef = new FixtureDef();
 		fixtureDef.shape = circle;
 
-		fixtureDef.density = 0f;
+		fixtureDef.density = 0.1f;
 		fixtureDef.friction = 0f;
 		fixtureDef.restitution = 0f;
+		fixtureDef.isSensor = true;
 		
 
 		b.createFixture(fixtureDef);

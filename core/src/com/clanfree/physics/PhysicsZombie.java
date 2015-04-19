@@ -2,7 +2,10 @@ package com.clanfree.physics;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.physics.box2d.Contact;
+import com.clanfree.components.StateComponent;
+import com.clanfree.components.TransformComponent;
 import com.clanfree.components.ZombieComponent;
+import com.clanfree.game.WorldBuilder;
 
 
 public class PhysicsZombie implements PhysicsObject {
@@ -15,9 +18,13 @@ public class PhysicsZombie implements PhysicsObject {
 	@Override
 	public void BeginContactHandler(PhysicsDataStructure struct, Contact contact) {
 		if(struct.type == PhysicsObjectType.ARROW) {
+			StateComponent sc = zombie.getComponent(StateComponent.class);
 			ZombieComponent zc = zombie.getComponent(ZombieComponent.class);
 			
-			zc.isDead = true;		
+			TransformComponent tc = ((PhysicsArrow) struct.obj).arrow.getComponent(TransformComponent.class);
+			
+			zc.gore = WorldBuilder.getBuilder().buildGore(tc.pos, tc.rotation);
+			sc.set(ZombieComponent.STATE_DEAD);		
 		}
 	}
 
