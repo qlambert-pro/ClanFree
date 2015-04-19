@@ -1,7 +1,6 @@
 package com.clanfree.components;
 
 import com.badlogic.ashley.core.Component;
-import com.badlogic.ashley.core.Entity;
 
 public class ZombieComponent extends Component {
 	public static final int STATE_FOLLOWING = 0;
@@ -11,5 +10,4 @@ public class ZombieComponent extends Component {
 	public static final float WIDTH = 0.8f; 
 	
 	public boolean isDead = false;
-	public Entity gore;
 }

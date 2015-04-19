@@ -8,6 +8,7 @@ import com.badlogic.gdx.physics.box2d.joints.RopeJoint;
 import com.badlogic.gdx.physics.box2d.joints.RopeJointDef;
 import com.clanfree.components.AnimationComponent;
 import com.clanfree.components.ArrowComponent;
+import com.clanfree.components.GoreComponent;
 import com.clanfree.components.MovementComponent;
 import com.clanfree.components.PlayerComponent;
 import com.clanfree.components.StateComponent;
@@ -179,29 +180,16 @@ public class WorldBuilder {
 		return entity;
 	}
 	
-	public Entity buildGore(Vector2 p, float dir){
+	public Entity buildGore(Vector2 p){
 		Entity entity = new Entity();
 		
-		AnimationComponent animation = new AnimationComponent();
-		TransformComponent position = new TransformComponent();
-		StateComponent state = new StateComponent();
-		TextureComponent texture = new TextureComponent();
-		
-
-		animation.animations.put(0, GraphicsAsset.gore);		
-		
-		position.pos.set(p);
-		position.scale.set(0.8f, 0.8f);
+		GoreComponent gore = new GoreComponent();
+		gore.particles = GraphicsAsset.getGore();
+		gore.particles.setPosition(p.x, p.y);
+		gore.particles.start();
 		
 		
-		position.rotation = dir;		
-		 
-		state.set(0);
-		
-		entity.add(animation);	
-		entity.add(position);
-		entity.add(state);
-		entity.add(texture);
+		entity.add(gore);	
 		
 		engine.addEntity(entity);		
 		

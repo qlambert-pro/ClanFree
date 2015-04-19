@@ -3,6 +3,7 @@ package com.clanfree.rendering;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g2d.Animation.PlayMode;
 
@@ -10,7 +11,6 @@ public class GraphicsAsset {
 	public static Animation adjouaStanding;
 	public static Animation zombie;
 	public static Animation arrow;
-	public static Animation gore;
 	
 	public static Texture loadTexture (String file) {
 		return new Texture(Gdx.files.internal(file));
@@ -28,6 +28,13 @@ public class GraphicsAsset {
 		arrow = new Animation(0.2f, new TextureRegion(characAnim, 0,  800, 400, 400), new TextureRegion(characAnim, 400,   800, 400, 400));
 		arrow.setPlayMode(PlayMode.LOOP);
 		
-		gore = new Animation(0.2f, new TextureRegion(characAnim, 0,  1200, 400, 400), new TextureRegion(characAnim, 400,   1200, 400, 400), new TextureRegion(characAnim, 800,   1200, 400, 400));
+		
+	}
+	
+	public static ParticleEffect getGore() {
+		ParticleEffect gore = new ParticleEffect();
+		gore.load(Gdx.files.internal("gore.p"), Gdx.files.internal("."));
+		
+		return gore;
 	}
 }

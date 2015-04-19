@@ -22,9 +22,8 @@ public class PhysicsZombie implements PhysicsObject {
 			ZombieComponent zc = zombie.getComponent(ZombieComponent.class);
 			
 			TransformComponent tc = ((PhysicsArrow) struct.obj).arrow.getComponent(TransformComponent.class);
-			
-			zc.gore = WorldBuilder.getBuilder().buildGore(tc.pos, tc.rotation);
-			sc.set(ZombieComponent.STATE_DEAD);		
+			WorldBuilder.getBuilder().buildGore(tc.pos);
+			zc.isDead = true;		
 		}
 	}
 

@@ -21,6 +21,8 @@ public class ConfigManager {
 	public static float arrowDamping = 1f;
 
 	public static int zombiePop = 1;
+
+	public static long spawnMax = 50;
 	
 	public static final float max_distance = camWidth*1000*PhysicsManager.WORLD_TO_BOX;
 }

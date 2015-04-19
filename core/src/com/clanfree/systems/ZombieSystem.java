@@ -34,28 +34,14 @@ public class ZombieSystem extends IteratingSystem {
 		TransformComponent tp = entity.getComponent(TransformComponent.class);
 		StateComponent state = entity.getComponent(StateComponent.class);
 		
-		if(state.get() == ZombieComponent.STATE_DEAD &&
-			state.time >= 0.8f)
-			zc.isDead = true;
-		
-		if (zc.isDead) {
+		if (zc.isDead) {			
 			SoundManager.getInstance().deadZombie();
-			engine.removeEntity(zc.gore);
+			PhysicsManager.getInstance().destroyBody(tp.body);
 			engine.removeEntity(entity);
 			gameMode.killZombie();
 			return;
 		}
 		
-		
-		if(state.get() == ZombieComponent.STATE_DEAD) {
-			if(tp.body != null) {
-				PhysicsManager.getInstance().destroyBody(tp.body);
-				entity.remove(MovementComponent.class);
-				tp.body = null;
-			}
-			
-			return;
-		}
 		
 		TransformComponent atp = adjoua.getComponent(TransformComponent.class);	
 		

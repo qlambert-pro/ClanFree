@@ -28,6 +28,7 @@ import com.clanfree.sound.SoundManager;
 import com.clanfree.systems.AnimationSystem;
 import com.clanfree.systems.ArrowSystem;
 import com.clanfree.systems.CameraSystem;
+import com.clanfree.systems.GoreSystem;
 import com.clanfree.systems.PhysicsSystem;
 import com.clanfree.systems.PlayerSystem;
 import com.clanfree.systems.RenderingSystem;
@@ -115,7 +116,8 @@ public class GameMode extends ScreenAdapter {
 		engine.addSystem(new PhysicsSystem());
 		engine.addSystem(new CameraSystem());
 		engine.addSystem(new AnimationSystem());
-		engine.addSystem(new RenderingSystem(batch, map, cam));
+		engine.addSystem(new RenderingSystem(batch,cam));
+		engine.addSystem(new GoreSystem(engine, batch, cam));
 	}
 	
 	private void createCamera(Entity target) {
@@ -186,7 +188,9 @@ public class GameMode extends ScreenAdapter {
 				Vector2 pos = getNewZombiePos();
 				WorldBuilder.getBuilder().buildZombie(pos);
 			}
-			cnt++;
+			
+			if (cnt < ConfigManager.spawnMax)			
+				cnt++;
 	}
 
 	private Vector2 getNewZombiePos() {

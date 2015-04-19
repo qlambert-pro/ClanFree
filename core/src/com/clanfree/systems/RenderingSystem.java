@@ -12,26 +12,22 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.Array;
 import com.clanfree.components.TextureComponent;
 import com.clanfree.components.TransformComponent;
-import com.clanfree.map.Map;
 
 public class RenderingSystem extends IteratingSystem {
 	
 	private SpriteBatch batch;
 	private Array<Entity> renderQueue;
 	private OrthographicCamera cam;
-	private Map map;
 	
 	private Texture background;
 
-	public RenderingSystem(SpriteBatch batch, Map map, OrthographicCamera cam) {
+	public RenderingSystem(SpriteBatch batch, OrthographicCamera cam) {
 		super(Family.getFor(TransformComponent.class, TextureComponent.class));
 	
 		renderQueue = new Array<Entity>();
 	
 		this.batch = batch;
-		this.cam = cam;
-		this.map = map;
-		
+		this.cam = cam;		
 		
 		background = new Texture(Gdx.files.internal("background.png"));
 		background.setWrap(TextureWrap.Repeat, TextureWrap.Repeat);
@@ -42,9 +38,12 @@ public class RenderingSystem extends IteratingSystem {
 	public void update(float deltaTime) {
 		super.update(deltaTime);
 		
+		float px = cam.position.x % background.getWidth();
+		float py = cam.position.y % background.getHeight();
+		
+		//px +=  background.getWidth();
 		
 		
-		//map.render(batch, cam);
 		
 		batch.setProjectionMatrix(cam.combined);
 		batch.begin();

@@ -15,6 +15,7 @@ public class AnimationSystem extends IteratingSystem {
 				AnimationComponent.class,
 				StateComponent.class));
 	}
+	
 	@Override
 	protected void processEntity(Entity entity, float deltaTime) {
 		long id = entity.getId();
