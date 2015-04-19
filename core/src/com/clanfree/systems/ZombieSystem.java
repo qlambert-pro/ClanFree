@@ -11,6 +11,7 @@ import com.clanfree.components.ZombieComponent;
 import com.clanfree.configuration.ConfigManager;
 import com.clanfree.mode.GameMode;
 import com.clanfree.physics.PhysicsManager;
+import com.clanfree.sound.SoundManager;
 
 public class ZombieSystem extends IteratingSystem {
 	Entity adjoua;
@@ -30,6 +31,7 @@ public class ZombieSystem extends IteratingSystem {
 		ZombieComponent zc = entity.getComponent(ZombieComponent.class);
 		TransformComponent tp = entity.getComponent(TransformComponent.class);
 		if (zc.isDead) {
+			SoundManager.getInstance().deadZombie();
 			PhysicsManager.getInstance().destroyBody(tp.body);
 			engine.removeEntity(entity);
 			gameMode.killZombie();

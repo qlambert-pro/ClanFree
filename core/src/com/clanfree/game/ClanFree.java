@@ -47,8 +47,4 @@ public class ClanFree extends Game {
 	public void startGameMode() {
 		setScreen(gameMode);
 	}
-
-	public void gameOver() {
-		dispose();
-	}
 }

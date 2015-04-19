@@ -22,6 +22,7 @@ import com.clanfree.configuration.ConfigManager;
 import com.clanfree.controls.KeyboardPlayerControls;
 import com.clanfree.controls.PlayerControls;
 import com.clanfree.physics.PhysicsManager;
+import com.clanfree.sound.SoundManager;
 import com.clanfree.systems.AnimationSystem;
 import com.clanfree.systems.ArrowSystem;
 import com.clanfree.systems.CameraSystem;
@@ -112,6 +113,7 @@ public class GameMode extends ScreenAdapter {
 	@Override
 	public void render(float dt) {
 		if (isEnd) {
+			SoundManager.getInstance().endBackgroundMusic();
 			PhysicsManager.getInstance().clear();
 			engine.removeAllEntities();
 			controller.removeListener(controllerListener);
@@ -126,6 +128,7 @@ public class GameMode extends ScreenAdapter {
 		
 		if (isStart) {
 			time = System.currentTimeMillis();
+			SoundManager.getInstance().startBackGroundMusic();
 			isStart = false;
 		}
 		
