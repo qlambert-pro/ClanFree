@@ -10,6 +10,8 @@ import com.badlogic.gdx.controllers.ControllerListener;
 import com.badlogic.gdx.controllers.Controllers;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.clanfree.game.ClanFree;
@@ -34,6 +36,9 @@ import com.clanfree.systems.ZombieSystem;
 public class GameMode extends ScreenAdapter {
 	private ClanFree game;
 	
+	private SpriteBatch batch;
+	private BitmapFont font;
+	
 	private Engine engine;
 	private MapLoader mapLoader;
 	private Map map;
@@ -46,7 +51,10 @@ public class GameMode extends ScreenAdapter {
 	private int zombieCount = 0;
 
 	private boolean isEnd = false;
-	private boolean isStart = true;
+	private boolean isStart = false;
+	private boolean isCountDown = true;
+	private long cdTime = 0;
+	
 
 	private Entity player;
 
@@ -60,7 +68,13 @@ public class GameMode extends ScreenAdapter {
 	public void show() {		
 		zombieCount = 0;
 		isEnd = false;
-		isStart = true;
+		isStart = false;
+		isCountDown = true;
+		cdTime = 0;
+		
+		batch = new SpriteBatch();
+		font = new BitmapFont();
+		font.scale(50f);
 		
 		engine = new Engine();
 		WorldBuilder.getBuilder().init(engine);
@@ -98,7 +112,7 @@ public class GameMode extends ScreenAdapter {
 		engine.addSystem(new PhysicsSystem());
 		engine.addSystem(new CameraSystem());
 		engine.addSystem(new AnimationSystem());
-		engine.addSystem(new RenderingSystem(map, cam));
+		engine.addSystem(new RenderingSystem(batch, map, cam));
 	}
 	
 	private void createCamera(Entity target) {
@@ -114,31 +128,55 @@ public class GameMode extends ScreenAdapter {
 	public void render(float dt) {
 		if (isEnd) {
 			SoundManager.getInstance().endBackgroundMusic();
+			SoundManager.getInstance().stopArrow();
 			PhysicsManager.getInstance().clear();
 			engine.removeAllEntities();
 			controller.removeListener(controllerListener);
 			game.startCreditMode(System.currentTimeMillis()-time, zombieCount);
 		}
 		
-		//TODO
-		//if (isCountDown) {
-		// isStart = true
-		// return;
-		//}
-		
+						
 		if (isStart) {
 			time = System.currentTimeMillis();
 			SoundManager.getInstance().startBackGroundMusic();
+			SoundManager.getInstance().startArrow();
 			isStart = false;
 		}
 		
-		spawnZombies();
+		
 		
 		Gdx.gl.glClearColor(1f, 1f, 1f, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		
-		PhysicsManager.getInstance().update(dt);		
+				
+		
+		
+		if (isCountDown) {
+			if (cdTime == 0){
+				cdTime = System.currentTimeMillis();				
+			}
+			if (System.currentTimeMillis() - cdTime >= 5000){
+				isStart = true;
+				isCountDown = false;
+			}
+			
+		} else {
+			spawnZombies();
+		}
+		
+		PhysicsManager.getInstance().update(dt);
 		engine.update(dt);
+		
+		if(isCountDown) {
+			TransformComponent tc = player.getComponent(TransformComponent.class);
+			
+			String number = Float.toString((5*1000-(System.currentTimeMillis() - cdTime))/1000.0f);
+			
+			batch.begin();
+			font.draw(batch, number, tc.pos.x-900, tc.pos.y+300);
+			batch.end();
+		}
+			
 	}
 	
 	private void spawnZombies() {

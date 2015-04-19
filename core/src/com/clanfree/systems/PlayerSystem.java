@@ -8,6 +8,7 @@ import com.clanfree.components.PlayerComponent;
 import com.clanfree.components.TransformComponent;
 import com.clanfree.configuration.ConfigManager;
 import com.clanfree.mode.GameMode;
+import com.clanfree.sound.SoundManager;
 
 
 
@@ -35,6 +36,7 @@ public class PlayerSystem extends EntitySystem{
 		}
 		
 		tp.body.applyForceToCenter(mp.accel.cpy().scl(tp.body.getMass()), true);
+		
 		
 		if (!mp.accel.epsilonEquals(0, 0, ConfigManager.epsilon)) {
 			tp.rotation = MathUtils.atan2(mp.accel.y, mp.accel.x) -

@@ -8,7 +8,10 @@ public class SoundManager {
 	
 	
 	private Sound deadZombie;
-	private Sound arrow;
+	private long  arrowxid;
+	private Sound arrowx;
+	private long  arrowyid;
+	private Sound arrowy;
 	private Sound zombie;
 	private Sound music;
 	
@@ -24,7 +27,8 @@ public class SoundManager {
 	private SoundManager() {
 		deadZombie = Gdx.audio.newSound(Gdx.files.internal("sound/deadZombie.wav"));				
 		//zombie = Gdx.audio.newSound(Gdx.files.internal("sound/zombie.wav"));	
-		//arrow = Gdx.audio.newSound(Gdx.files.internal("sound/arrow.wav"));
+		arrowx = Gdx.audio.newSound(Gdx.files.internal("sound/arrow1.wav"));
+		arrowy = Gdx.audio.newSound(Gdx.files.internal("sound/arrow1.wav"));
 		music = Gdx.audio.newSound(Gdx.files.internal("sound/background.wav"));
 	}
 	
@@ -32,6 +36,27 @@ public class SoundManager {
 		long id = music.play();
 		music.setLooping(id,true);
 		music.setVolume(id, volume);
+	}
+	
+	public void startArrow() {
+		arrowxid = arrowx.play();
+		arrowx.setLooping(arrowxid,true);
+		arrowx.setVolume(arrowxid, 0.3f);
+	
+		arrowyid = arrowy.play();
+		arrowy.setLooping(arrowyid,true);
+		arrowy.setVolume(arrowyid, 0.3f);
+		
+	}
+	
+	public void stopArrow() {
+		arrowx.stop();
+		arrowy.stop();
+	}
+	
+	public void setPitchArrow(float x, float y) {
+		arrowx.setPitch(arrowxid, x);
+		arrowy.setPitch(arrowyid, y);
 	}
 	
 	public void endBackgroundMusic() {
@@ -42,5 +67,4 @@ public class SoundManager {
 		long id = deadZombie.play();
 		deadZombie.setVolume(id, volume);
 	}	
-	//deadZombie.setPitch(id, pitch);
 }

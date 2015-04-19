@@ -6,6 +6,7 @@ import com.badlogic.gdx.math.MathUtils;
 import com.clanfree.components.MovementComponent;
 import com.clanfree.components.PlayerComponent;
 import com.clanfree.components.TransformComponent;
+import com.clanfree.sound.SoundManager;
 
 public class ArrowSystem extends EntitySystem {	
 	private Entity arrow;
@@ -19,6 +20,9 @@ public class ArrowSystem extends EntitySystem {
 		TransformComponent tp = arrow.getComponent(TransformComponent.class);
 		MovementComponent mp = arrow.getComponent(MovementComponent.class);
 		
+		SoundManager.getInstance().setPitchArrow(tp.body.getLinearVelocity().x,
+												tp.body.getLinearVelocity().y);
+
 		tp.body.applyForceToCenter(mp.accel, true);
 		tp.rotation = MathUtils.atan2(tp.body.getLinearVelocity().y, tp.body.getLinearVelocity().x) -
 						MathUtils.atan2(1, 0);

@@ -23,12 +23,12 @@ public class RenderingSystem extends IteratingSystem {
 	
 	private Texture background;
 
-	public RenderingSystem(Map map, OrthographicCamera cam) {
+	public RenderingSystem(SpriteBatch batch, Map map, OrthographicCamera cam) {
 		super(Family.getFor(TransformComponent.class, TextureComponent.class));
 	
 		renderQueue = new Array<Entity>();
 	
-		this.batch = new SpriteBatch();
+		this.batch = batch;
 		this.cam = cam;
 		this.map = map;
 		
