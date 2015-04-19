@@ -7,4 +7,6 @@ public class ZombieComponent extends Component {
 	
 	public static final float MOVE_ACC = 80f;
 	public static final float WIDTH = 0.8f; 
+	
+	public boolean isDead = false;
 }

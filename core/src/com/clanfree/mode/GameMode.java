@@ -65,7 +65,7 @@ public class GameMode extends ScreenAdapter {
 		
 		engine.addSystem(ps);
 		engine.addSystem(as);
-		engine.addSystem(new ZombieSystem(player));
+		engine.addSystem(new ZombieSystem(engine, player));
 		engine.addSystem(new PhysicsSystem());
 		engine.addSystem(new CameraSystem());
 		engine.addSystem(new AnimationSystem());

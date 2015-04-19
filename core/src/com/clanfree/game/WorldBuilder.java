@@ -116,7 +116,7 @@ public class WorldBuilder {
 		
 		engine.addEntity(entity);
 
-		PhysicsDataStructure s = new PhysicsDataStructure(new PhysicsZombie(),
+		PhysicsDataStructure s = new PhysicsDataStructure(new PhysicsZombie(entity),
 														  PhysicsObjectType.ZOMBIE);
 		position.body = PhysicsManager.getInstance().createDynamicCircle(
 				position.pos.cpy(), PlayerComponent.WIDTH/2, s);		
