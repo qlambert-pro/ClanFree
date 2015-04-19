@@ -19,6 +19,8 @@ public class ConfigManager {
 	public static float epsilon = 0.01f;
 	public static float playerDamping = 5.0f;
 	public static float arrowDamping = 1f;
+
+	public static int zombiePop = 1;
 	
 	public static final float max_distance = camWidth*1000*PhysicsManager.WORLD_TO_BOX;
 }

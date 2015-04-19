@@ -5,14 +5,18 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.controllers.Controller;
+import com.badlogic.gdx.controllers.ControllerListener;
 import com.badlogic.gdx.controllers.Controllers;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Vector2;
 import com.clanfree.game.ClanFree;
 import com.clanfree.game.WorldBuilder;
 import com.clanfree.map.Map;
 import com.clanfree.map.MapLoader;
 import com.clanfree.components.CameraComponent;
+import com.clanfree.components.TransformComponent;
 import com.clanfree.configuration.ConfigManager;
 import com.clanfree.controls.PlayerControls;
 import com.clanfree.physics.PhysicsManager;
@@ -31,10 +35,26 @@ public class GameMode extends ScreenAdapter {
 	private MapLoader mapLoader;
 	private Map map;
 	
+	Controller controller;
+	ControllerListener controllerListener;
+	
 	private OrthographicCamera cam;
 	
+	private int zombieCount = 0;
+
+	private boolean isEnd = false;
+	private boolean isStart = true;
+
+	private Entity player;
+
+	private long time;
+	
 	public GameMode(ClanFree g) {
-		game = g;
+		game = g;				
+	}
+	
+	public void show() {
+		zombieCount = 0;
 		
 		engine = new Engine();
 		WorldBuilder.getBuilder().init(engine);
@@ -47,16 +67,15 @@ public class GameMode extends ScreenAdapter {
 		
 				
 		/* Init Character */
-		Controller c = Controllers.getControllers().first();
-		Entity player = WorldBuilder.getBuilder().buildPlayer(map.getSpawn());
+		controller = Controllers.getControllers().first();
+		player = WorldBuilder.getBuilder().buildPlayer(map.getSpawn());
 		Entity arrow = WorldBuilder.getBuilder().buildArrow(player, map.getSpawn());
 		
-		PlayerSystem ps = new PlayerSystem(player); 
+		PlayerSystem ps = new PlayerSystem(this, player); 
 		ArrowSystem as = new ArrowSystem(arrow);
 		
-		c.addListener(new PlayerControls(ps, as));
-		
-		WorldBuilder.getBuilder().buildZombie(map.getSpawn().cpy().add(10, 10));
+		controllerListener = new PlayerControls(ps, as);
+		controller.addListener(controllerListener);
 		
 		cam = new OrthographicCamera(ConfigManager.camWidth  * ConfigManager.minBlockSize,
 								 ConfigManager.camHeight * ConfigManager.minBlockSize);
@@ -65,7 +84,7 @@ public class GameMode extends ScreenAdapter {
 		
 		engine.addSystem(ps);
 		engine.addSystem(as);
-		engine.addSystem(new ZombieSystem(engine, player));
+		engine.addSystem(new ZombieSystem(this, engine, player));
 		engine.addSystem(new PhysicsSystem());
 		engine.addSystem(new CameraSystem());
 		engine.addSystem(new AnimationSystem());
@@ -83,10 +102,59 @@ public class GameMode extends ScreenAdapter {
 	
 	@Override
 	public void render(float dt) {
+		if (isEnd) {
+			PhysicsManager.getInstance().clear();
+			engine.removeAllEntities();
+			controller.removeListener(controllerListener);
+			game.startCreditMode(System.currentTimeMillis()-time, zombieCount);
+		}
+		
+		//TODO
+		//if (isCountDown) {
+		// isStart = true
+		// return;
+		//}
+		
+		if (isStart) {
+			time = System.currentTimeMillis();
+			isStart = false;
+		}
+		
+		spawnZombies();
+		
 		Gdx.gl.glClearColor(1f, 1f, 1f, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		
 		PhysicsManager.getInstance().update(dt);		
 		engine.update(dt);
+	}
+	
+	private void spawnZombies() {
+		for (int i = 0; i < ConfigManager.zombiePop; i++) {
+			Vector2 pos = getNewZombiePos();
+			WorldBuilder.getBuilder().buildZombie(pos);
+		}
+	}
+
+	private Vector2 getNewZombiePos() {
+		float x = MathUtils.random(-1f, 1f);
+		float y = MathUtils.random(-1f, 1f);
+		
+		TransformComponent tc = player.getComponent(TransformComponent.class);
+		
+		Vector2 p = new Vector2(x, y);
+		p.setLength(1);
+		p.scl(3000);
+		p.add(tc.pos);
+				
+		return p;
+	}
+
+	public void endGame() {
+		isEnd = true;
+	}
+	
+	public void killZombie() {
+		zombieCount++;
 	}
 }

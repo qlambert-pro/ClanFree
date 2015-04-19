@@ -79,7 +79,7 @@ public class WorldBuilder {
 				
 		 
 		
-		PhysicsDataStructure s = new PhysicsDataStructure(new PhysicsCharacter(),
+		PhysicsDataStructure s = new PhysicsDataStructure(new PhysicsCharacter(entity),
 														  PhysicsObjectType.PLAYER);
 		position.body = PhysicsManager.getInstance().createDynamicCircle(
 				position.pos.cpy(), PlayerComponent.WIDTH/2, s);				

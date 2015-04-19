@@ -7,23 +7,32 @@ import com.clanfree.components.MovementComponent;
 import com.clanfree.components.PlayerComponent;
 import com.clanfree.components.TransformComponent;
 import com.clanfree.configuration.ConfigManager;
+import com.clanfree.mode.GameMode;
 
 
 
 
-public class PlayerSystem extends EntitySystem{	
-	private Entity player;
+public class PlayerSystem extends EntitySystem{
+	GameMode gameMode;
 	
-	public PlayerSystem(Entity player) {
+	private Entity player;
+
+	
+	public PlayerSystem(GameMode gameMode, Entity player) {
 		this.player = player;
+		this.gameMode = gameMode;
 	}
 	
 	@Override
 	public void update(float dt) {
 		TransformComponent tp = player.getComponent(TransformComponent.class);
 		MovementComponent mp = player.getComponent(MovementComponent.class);
+		PlayerComponent pc = player.getComponent(PlayerComponent.class);
 		
-		
+		if (pc.isDead) {
+			gameMode.endGame();
+			return;
+		}
 		
 		tp.body.applyForceToCenter(mp.accel.cpy().scl(tp.body.getMass()), true);
 		

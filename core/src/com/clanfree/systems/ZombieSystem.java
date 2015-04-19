@@ -9,16 +9,20 @@ import com.badlogic.gdx.math.Vector2;
 import com.clanfree.components.TransformComponent;
 import com.clanfree.components.ZombieComponent;
 import com.clanfree.configuration.ConfigManager;
+import com.clanfree.mode.GameMode;
 import com.clanfree.physics.PhysicsManager;
 
 public class ZombieSystem extends IteratingSystem {
 	Entity adjoua;
 	Engine engine;
 	
-	public ZombieSystem(Engine engine, Entity e) {
+	GameMode gameMode;
+	
+	public ZombieSystem(GameMode g, Engine engine, Entity e) {
 		super(Family.getFor(ZombieComponent.class));
 		adjoua = e;
 		this.engine = engine;
+		gameMode = g;
 	}
 	
 	@Override
@@ -28,6 +32,8 @@ public class ZombieSystem extends IteratingSystem {
 		if (zc.isDead) {
 			PhysicsManager.getInstance().destroyBody(tp.body);
 			engine.removeEntity(entity);
+			gameMode.killZombie();
+			return;
 		}
 		
 		

@@ -1,15 +1,24 @@
 package com.clanfree.physics;
 
 
+import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.physics.box2d.Contact;
+import com.clanfree.components.PlayerComponent;
 
-public class PhysicsCharacter implements PhysicsObject {	
-	public PhysicsCharacter() {
+public class PhysicsCharacter implements PhysicsObject {
+	Entity player = null;
+	
+	public PhysicsCharacter(Entity player) {
+		this.player = player;
 	}
 
 	@Override
 	public void BeginContactHandler(PhysicsDataStructure struct, Contact contact) {
-		
+		if(struct.type == PhysicsObjectType.ZOMBIE) {
+			PlayerComponent zc = player.getComponent(PlayerComponent.class);
+			
+			zc.isDead = true;		
+		}
 	}
 
 	@Override

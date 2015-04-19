@@ -15,4 +15,5 @@ public class PlayerComponent extends Component {
 	public static final float MASS = 1.0f;
 	
 	public Controller c = null;
+	public boolean isDead = false;
 }
