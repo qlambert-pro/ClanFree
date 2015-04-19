@@ -3,6 +3,7 @@ package com.clanfree.mode;
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.controllers.Controller;
 import com.badlogic.gdx.controllers.ControllerListener;
@@ -18,6 +19,7 @@ import com.clanfree.map.MapLoader;
 import com.clanfree.components.CameraComponent;
 import com.clanfree.components.TransformComponent;
 import com.clanfree.configuration.ConfigManager;
+import com.clanfree.controls.KeyboardPlayerControls;
 import com.clanfree.controls.PlayerControls;
 import com.clanfree.physics.PhysicsManager;
 import com.clanfree.systems.AnimationSystem;
@@ -48,12 +50,13 @@ public class GameMode extends ScreenAdapter {
 	private Entity player;
 
 	private long time;
+	private InputAdapter inputs;
 	
 	public GameMode(ClanFree g) {
 		game = g;				
 	}
 	
-	public void show() {
+	public void show() {		
 		zombieCount = 0;
 		
 		engine = new Engine();
@@ -76,6 +79,10 @@ public class GameMode extends ScreenAdapter {
 		
 		controllerListener = new PlayerControls(ps, as);
 		controller.addListener(controllerListener);
+		
+		inputs = new KeyboardPlayerControls(ps, as);
+		game.setInputProcessor(inputs);
+		
 		
 		cam = new OrthographicCamera(ConfigManager.camWidth  * ConfigManager.minBlockSize,
 								 ConfigManager.camHeight * ConfigManager.minBlockSize);
