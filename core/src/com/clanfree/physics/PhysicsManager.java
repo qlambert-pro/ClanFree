@@ -68,15 +68,16 @@ public class PhysicsManager {
 		bodyDef.type = BodyType.DynamicBody;
 		bodyDef.fixedRotation = false;
 		bodyDef.linearDamping = ConfigManager.playerDamping;
-		Body b = world.createBody(bodyDef);
 
+		Body b = world.createBody(bodyDef);
+		
 		CircleShape circle = new CircleShape();
 		circle.setRadius(size);
 
 		FixtureDef fixtureDef = new FixtureDef();
 		fixtureDef.shape = circle;
 
-		fixtureDef.density = 1.0f;
+		fixtureDef.density = 100.0f;
 		fixtureDef.friction = 0f;
 		fixtureDef.restitution = 0f;
 		
@@ -92,7 +93,7 @@ public class PhysicsManager {
 		bodyDef.position.set(WORLD_TO_BOX * pos.x, WORLD_TO_BOX * pos.y);
 		bodyDef.type = BodyType.DynamicBody;
 		bodyDef.fixedRotation = false;
-		
+		bodyDef.linearDamping = ConfigManager.arrowDamping;
 		Body b = world.createBody(bodyDef);
 
 		CircleShape circle = new CircleShape();

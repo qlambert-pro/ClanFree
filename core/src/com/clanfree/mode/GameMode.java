@@ -35,7 +35,7 @@ public class GameMode extends ScreenAdapter {
 	
 	public GameMode(ClanFree g) {
 		game = g;
-	
+		
 		engine = new Engine();
 		WorldBuilder.getBuilder().init(engine);
 		
@@ -49,7 +49,7 @@ public class GameMode extends ScreenAdapter {
 		/* Init Character */
 		Controller c = Controllers.getControllers().first();
 		Entity player = WorldBuilder.getBuilder().buildPlayer(map.getSpawn());
-		Entity arrow = WorldBuilder.getBuilder().buildArrow(map.getSpawn());
+		Entity arrow = WorldBuilder.getBuilder().buildArrow(player, map.getSpawn());
 		
 		PlayerSystem ps = new PlayerSystem(player); 
 		ArrowSystem as = new ArrowSystem(arrow);

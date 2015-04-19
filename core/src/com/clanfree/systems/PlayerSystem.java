@@ -23,7 +23,9 @@ public class PlayerSystem extends EntitySystem{
 		TransformComponent tp = player.getComponent(TransformComponent.class);
 		MovementComponent mp = player.getComponent(MovementComponent.class);
 		
-		tp.body.applyForceToCenter(mp.accel, true);
+		
+		
+		tp.body.applyForceToCenter(mp.accel.cpy().scl(tp.body.getMass()), true);
 		
 		if (!mp.accel.epsilonEquals(0, 0, ConfigManager.epsilon)) {
 			tp.rotation = MathUtils.atan2(mp.accel.y, mp.accel.x) -

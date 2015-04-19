@@ -27,7 +27,7 @@ public class ZombieSystem extends IteratingSystem {
 		Vector2 accel = new Vector2();
 		accel.set(atp.pos);
 		accel.sub(tp.pos);
-		accel.scl(ZombieComponent.MOVE_ACC/accel.len());
+		accel.scl(ZombieComponent.MOVE_ACC * tp.body.getMass()/accel.len());
 		
 		tp.body.applyForceToCenter(accel, true);
 		

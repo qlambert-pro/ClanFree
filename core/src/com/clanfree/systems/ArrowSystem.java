@@ -20,7 +20,7 @@ public class ArrowSystem extends EntitySystem {
 		MovementComponent mp = arrow.getComponent(MovementComponent.class);
 		
 		tp.body.applyForceToCenter(mp.accel, true);
-		tp.rotation = MathUtils.atan2(mp.accel.y, mp.accel.x) -
+		tp.rotation = MathUtils.atan2(tp.body.getLinearVelocity().y, tp.body.getLinearVelocity().x) -
 						MathUtils.atan2(1, 0);
 		}
 

@@ -3,6 +3,9 @@ package com.clanfree.game;
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.physics.box2d.joints.RopeJoint;
+import com.badlogic.gdx.physics.box2d.joints.RopeJointDef;
 import com.clanfree.components.AnimationComponent;
 import com.clanfree.components.ArrowComponent;
 import com.clanfree.components.MovementComponent;
@@ -11,6 +14,7 @@ import com.clanfree.components.StateComponent;
 import com.clanfree.components.TextureComponent;
 import com.clanfree.components.TransformComponent;
 import com.clanfree.components.ZombieComponent;
+import com.clanfree.configuration.ConfigManager;
 import com.clanfree.physics.PhysicsArrow;
 import com.clanfree.physics.PhysicsCharacter;
 import com.clanfree.physics.PhysicsDataStructure;
@@ -124,7 +128,7 @@ public class WorldBuilder {
 		return entity;
 	}
 	
-	public Entity buildArrow(Vector2 p){
+	public Entity buildArrow(Entity player, Vector2 p){
 		Entity entity = new Entity();
 		
 		AnimationComponent animation = new AnimationComponent();
@@ -159,7 +163,17 @@ public class WorldBuilder {
 		
 		movement.velocity.scl(position.body.getMass());
 		position.body.setLinearVelocity(movement.velocity);
-		position.body.setAngularDamping(0);				
+		position.body.setAngularDamping(0);	
+		
+		Body anchorPlayer = player.getComponent(TransformComponent.class).body;
+		
+		RopeJointDef jointDef = new RopeJointDef();
+		jointDef.bodyA = position.body;
+		jointDef.bodyB = anchorPlayer;
+		jointDef.collideConnected = true;
+		jointDef.maxLength = ConfigManager.max_distance * PhysicsManager.WORLD_TO_BOX;
+		
+		arrow.joint = (RopeJoint) PhysicsManager.getInstance().createJoint(jointDef);
 		
 		return entity;
 	}
