@@ -43,7 +43,7 @@ public class GameMode extends ScreenAdapter {
 	
 	private Engine engine;
 	
-	Controller controller;
+	Controller controller = null;
 	ControllerListener controllerListener;
 	
 	private OrthographicCamera cam;
@@ -89,15 +89,18 @@ public class GameMode extends ScreenAdapter {
 		Vector2 spawn = new Vector2(5000*500, 5000*500);
 		
 		/* Init Character */
-		controller = Controllers.getControllers().first();
+		if (Controllers.getControllers().size > 0)
+			controller = Controllers.getControllers().first();
 		player = WorldBuilder.getBuilder().buildPlayer(spawn);
 		Entity arrow = WorldBuilder.getBuilder().buildArrow(player, spawn);
 		
 		PlayerSystem ps = new PlayerSystem(this, player); 
 		ArrowSystem as = new ArrowSystem(arrow);
 		
-		controllerListener = new PlayerControls(ps, as);
-		controller.addListener(controllerListener);
+		if (controller != null) {
+			controllerListener = new PlayerControls(ps, as);
+			controller.addListener(controllerListener);
+		}
 		
 		inputs = new KeyboardPlayerControls(ps, as);
 		game.setInputProcessor(inputs);
@@ -148,7 +151,8 @@ public class GameMode extends ScreenAdapter {
 			
 		if (engine.getEntitiesFor(Family.getFor(GoreComponent.class)).size() == 0 && isFinished) {
 			engine.removeAllEntities();
-			controller.removeListener(controllerListener);
+			if(controller != null)
+				controller.removeListener(controllerListener);
 			game.startCreditMode(System.currentTimeMillis()-time, zombieCount);
 		}
 		
