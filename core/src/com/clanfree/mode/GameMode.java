@@ -196,7 +196,8 @@ public class GameMode extends ScreenAdapter {
 	}
 	
 	private void spawnZombies() {
-			if((System.currentTimeMillis() - time)/1000 <= cnt)
+			if((System.currentTimeMillis() - time)/1000 <= cnt ||
+				cnt >= ConfigManager.spawnMax)
 				return;
 		
 			for (int i = 0; i < cnt; i++) {
