@@ -26,10 +26,10 @@ public class PlayerControls extends ControllerAdapter {
 			aSystem.setAccY(-value);
 			return true;
 		case Xbox360Pad.AXIS_LEFT_X:
-			pSystem.setAccY(-value);
+			pSystem.setAccX(value);			
 			return true;
 		case Xbox360Pad.AXIS_LEFT_Y:			
-			pSystem.setAccX(value);
+			pSystem.setAccY(-value);
 			return true;
 		}
 		
