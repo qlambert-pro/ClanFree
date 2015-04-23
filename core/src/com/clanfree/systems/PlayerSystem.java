@@ -3,6 +3,7 @@ package com.clanfree.systems;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Vector2;
 import com.clanfree.components.MovementComponent;
 import com.clanfree.components.PlayerComponent;
 import com.clanfree.components.TransformComponent;
@@ -16,6 +17,9 @@ public class PlayerSystem extends EntitySystem{
 	GameMode gameMode;
 	
 	private Entity player;
+	
+	private int horizontal = 0;
+	private int vertical = 0;
 
 	
 	public PlayerSystem(GameMode gameMode, Entity player) {
@@ -36,9 +40,14 @@ public class PlayerSystem extends EntitySystem{
 		
 		tp.body.applyForceToCenter(mp.accel.cpy().scl(tp.body.getMass()), true);
 		
+		Vector2 keyAccel = new Vector2(horizontal, vertical);
+		if (keyAccel.len() != 0) {
+			keyAccel.scl(tp.body.getMass() * PlayerComponent.MOVE_ACC / keyAccel.len());
+			tp.body.applyForceToCenter(keyAccel, true);
+		}		
 		
-		if (!mp.accel.epsilonEquals(0, 0, ConfigManager.epsilon)) {
-			tp.rotation = MathUtils.atan2(mp.accel.y, mp.accel.x) -
+		if (!mp.velocity.epsilonEquals(0, 0, ConfigManager.epsilon)) {
+			tp.rotation = MathUtils.atan2(mp.velocity.y, mp.velocity.x) -
 				MathUtils.atan2(1, 0);
 		}		
 	}
@@ -51,5 +60,21 @@ public class PlayerSystem extends EntitySystem{
 	public void setAccY(float value) {
 		MovementComponent mp = player.getComponent(MovementComponent.class); 
 		mp.accel.y = value * PlayerComponent.MOVE_ACC;		
+	}
+	
+	public void goUp() {
+		vertical += 1;
+	}
+
+	public void goDown() {
+		vertical -= 1;
+	}
+	
+	public void goLeft() {
+		horizontal -= 1;
+	}
+	
+	public void goRight() {
+		horizontal += 1;
 	}
 }

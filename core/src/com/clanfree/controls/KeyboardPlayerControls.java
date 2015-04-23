@@ -19,37 +19,37 @@ public class KeyboardPlayerControls extends InputAdapter {
 	public boolean keyDown(int keycode) {
 		switch (keycode) {
 		case Keys.LEFT:
-			aSystem.setAccX(-1);
+			aSystem.goLeft();
 			return true;
 
 		case Keys.RIGHT:
-			aSystem.setAccX(1);
+			aSystem.goRight();
 			return true;
 
 		case Keys.UP:
-			aSystem.setAccY(1);
+			aSystem.goUp();
 			return true;
 			
 		case Keys.DOWN:
-			aSystem.setAccY(-1);
+			aSystem.goDown();
 			return true;
 
 		case Keys.A:
 		case Keys.Q:
-			pSystem.setAccX(-1);
+			pSystem.goLeft();
 			return true;
 			
 		case Keys.S:
-			pSystem.setAccY(-1);
+			pSystem.goDown();
 			return true;
 
 		case Keys.D:
-			pSystem.setAccX(1);
+			pSystem.goRight();
 			return true;
 
 		case Keys.W:
 		case Keys.Z:
-			pSystem.setAccY(1);
+			pSystem.goUp();
 			return true;
 		}
 
@@ -61,37 +61,37 @@ public class KeyboardPlayerControls extends InputAdapter {
 	   public boolean keyUp (int keycode) {
 			switch (keycode) {
 			case Keys.LEFT:
-				aSystem.setAccX(0);
+				aSystem.goRight();
 				return true;
 
 			case Keys.RIGHT:
-				aSystem.setAccX(0);
+				aSystem.goLeft();
 				return true;
 
 			case Keys.UP:
-				aSystem.setAccY(0);
+				aSystem.goDown();
 				return true;
 				
 			case Keys.DOWN:
-				aSystem.setAccY(0);
+				aSystem.goUp();
 				return true;
 
 			case Keys.A:
 			case Keys.Q:
-				pSystem.setAccX(0);
+				pSystem.goRight();
 				return true;
 				
 			case Keys.S:
-				pSystem.setAccY(0);
+				pSystem.goUp();
 				return true;
 
 			case Keys.D:
-				pSystem.setAccX(0);
+				pSystem.goLeft();
 				return true;
 
 			case Keys.W:
 			case Keys.Z:
-				pSystem.setAccY(0);
+				pSystem.goDown();
 				return true;
 			}
 			
